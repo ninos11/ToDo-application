@@ -11,6 +11,7 @@ public class Todo_application extends JFrame {
     private final JButton toTodoBtn = new JButton("←");
     private final JButton clearTodoBtn = new JButton("Rensa");
     private final JButton clearDoneBtn = new JButton("Rensa");
+    private final JButton clearAll = new JButton("Rensa allt");
 
     public Todo_application() {
         setTitle("ToDo Application");
@@ -58,6 +59,7 @@ public class Todo_application extends JFrame {
         JPanel arrows = new JPanel(new GridLayout(3,1,6,6));
         arrows.add(toDoneBtn);
         arrows.add(toTodoBtn);
+        arrows.add(clearAll);
         c.gridx = 2; c.gridy = 0;  c.fill = GridBagConstraints.NONE;
         center.add(arrows, c);
         c.fill = GridBagConstraints.BOTH;
