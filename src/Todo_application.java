@@ -7,6 +7,10 @@ public class Todo_application extends JFrame {
     private final JButton addButton = new JButton("Lägg till");
     private final JList<String> todoList = new JList<>();
     private final JList<String> doneList = new JList<>();
+    private final JButton toDoneBtn = new JButton("→");
+    private final JButton toTodoBtn = new JButton("←");
+    private final JButton clearTodoBtn = new JButton("Rensa");
+    private final JButton clearDoneBtn = new JButton("Rensa");
 
     public Todo_application() {
         setTitle("ToDo Application");
@@ -35,6 +39,7 @@ public class Todo_application extends JFrame {
         ToDoPanel.add(new JLabel("To-Do"), BorderLayout.NORTH);
         todoList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         ToDoPanel.add(new JScrollPane(todoList), BorderLayout.CENTER);
+        ToDoPanel.add(clearTodoBtn, BorderLayout.SOUTH);
         c.gridx = 1;
         c.gridy = 0;
         center.add(ToDoPanel, c);
@@ -44,10 +49,18 @@ public class Todo_application extends JFrame {
         DonePanel.add(new JLabel("Done"), BorderLayout.NORTH);
         doneList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         DonePanel.add(new JScrollPane(doneList), BorderLayout.CENTER);
-
+        DonePanel.add(clearDoneBtn, BorderLayout.SOUTH);
         c.gridx = 3;
         c.gridy = 0;
         center.add(DonePanel, c);
+
+        // Pilar i mitten
+        JPanel arrows = new JPanel(new GridLayout(3,1,6,6));
+        arrows.add(toDoneBtn);
+        arrows.add(toTodoBtn);
+        c.gridx = 2; c.gridy = 0;  c.fill = GridBagConstraints.NONE;
+        center.add(arrows, c);
+        c.fill = GridBagConstraints.BOTH;
 
         setVisible(true);
         setMinimumSize(new Dimension(720, 480));
