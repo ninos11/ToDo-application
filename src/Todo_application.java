@@ -58,24 +58,27 @@ public class Todo_application extends JFrame {
         center.add(DonePanel, c);
 
         // Pilar i mitten
-        JPanel arrows = new JPanel(new GridLayout(3,1,6,6));
+        JPanel arrows = new JPanel(new GridLayout(3, 1, 6, 6));
         arrows.add(toDoneBtn);
         arrows.add(toTodoBtn);
         arrows.add(clearAll);
-        c.gridx = 2; c.gridy = 0;  c.fill = GridBagConstraints.NONE;
+        c.gridx = 2;
+        c.gridy = 0;
+        c.fill = GridBagConstraints.NONE;
         center.add(arrows, c);
         c.fill = GridBagConstraints.BOTH;
 
-   
         addButton.addActionListener(e -> addTask());
         input.addActionListener(e -> addTask());
         toDoneBtn.addActionListener(e -> moveToDone());
+        toTodoBtn.addActionListener(e -> moveToTodo());
 
         setVisible(true);
         setMinimumSize(new Dimension(720, 480));
         setLocationRelativeTo(null);
 
     }
+
     // Lägg till uppgift i ToDo
     private void addTask() {
         String text = input.getText().trim();
@@ -86,21 +89,32 @@ public class Todo_application extends JFrame {
         }
     }
 
-     // Flytta markerade från ToDo till Done
+    // Flytta markerade tasks från ToDo till Done
     private void moveToDone() {
-    int[] idx = todoList.getSelectedIndices();
-    if (idx.length == 0) return;
+        int[] idx = todoList.getSelectedIndices();
+        if (idx.length == 0)
+            return;
 
-    // Lägg till i Done
-    for (int i : idx) {
-        doneModel.addElement(todoModel.get(i));
+        // Lägg till i Done
+        for (int i : idx) {
+            doneModel.addElement(todoModel.get(i));
+        }
     }
+    // Flytta markerade tasks från Done till Todo
+    private void moveToTodo() {
+        int[] index = doneList.getSelectedIndices();
+        if (index.length == 0)
+            return;
+
+        // Lägg till i ToDo
+        for (int i : index) {
+            todoModel.addElement(doneModel.get(i));
+        }
     }
-    
+
     public static void main(String[] args) throws Exception {
         new Todo_application();
 
     }
 
 }
-
