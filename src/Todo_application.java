@@ -72,6 +72,9 @@ public class Todo_application extends JFrame {
         input.addActionListener(e -> addTask());
         toDoneBtn.addActionListener(e -> moveToDone());
         toTodoBtn.addActionListener(e -> moveToTodo());
+        clearTodoBtn.addActionListener(e -> deleteSelectedTodo());
+        clearDoneBtn.addActionListener(e -> deleteSelectedDone());
+        clearAll.addActionListener(e -> clearAll());
 
         setVisible(true);
         setMinimumSize(new Dimension(720, 480));
@@ -101,10 +104,11 @@ public class Todo_application extends JFrame {
         }
 
         // Ta bort från ToDo (baklänges)
-    for (int i = idx.length - 1; i >= 0; i--) {
-        todoModel.remove(idx[i]);
+        for (int i = idx.length - 1; i >= 0; i--) {
+            todoModel.remove(idx[i]);
+        }
     }
-    }
+
     // Flytta markerade tasks från Done till Todo
     private void moveToTodo() {
         int[] idx = doneList.getSelectedIndices();
@@ -118,12 +122,35 @@ public class Todo_application extends JFrame {
         }
 
         // Ta bort från Done (baklänges)
-    for (int i = idx.length - 1; i >= 0; i--) {
+        for (int i = idx.length - 1; i >= 0; i--) {
         doneModel.remove(idx[i]);
-    }
+        }
 
-     
-    }
+        
+        }
+
+        // Rensa markerade i ToDo
+        private void deleteSelectedTodo() {
+        int[] idx = todoList.getSelectedIndices();
+        if (idx.length == 0) return;
+        for (int i = idx.length - 1; i >= 0; i--) {
+            todoModel.remove(idx[i]);
+        }
+        }
+
+        // Rensa markerade i Done
+        private void deleteSelectedDone() {
+        int[] idx = doneList.getSelectedIndices();
+        if (idx.length == 0) return;
+        for (int i = idx.length - 1; i >= 0; i--) {
+            doneModel.remove(idx[i]);
+        }
+        }
+        // Rensa allt i både ToDo och Done
+        private void clearAll() {
+            todoModel.clear(); 
+            doneModel.clear();
+        }
 
     public static void main(String[] args) throws Exception {
         new Todo_application();
