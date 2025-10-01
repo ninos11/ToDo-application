@@ -14,6 +14,7 @@ public class Todo_application extends JFrame {
     private final JButton clearTodoBtn = new JButton("Rensa");
     private final JButton clearDoneBtn = new JButton("Rensa");
     private final JButton clearAll = new JButton("Rensa allt");
+    private final JButton edit = new JButton("Redegera");
 
     public Todo_application() {
         setTitle("ToDo Application");
@@ -58,10 +59,11 @@ public class Todo_application extends JFrame {
         center.add(DonePanel, c);
 
         // Pilar i mitten
-        JPanel arrows = new JPanel(new GridLayout(3, 1, 6, 6));
+        JPanel arrows = new JPanel(new GridLayout(4, 1, 6, 6));
         arrows.add(toDoneBtn);
         arrows.add(toTodoBtn);
         arrows.add(clearAll);
+        arrows.add(edit);
         c.gridx = 2;
         c.gridy = 0;
         c.fill = GridBagConstraints.NONE;
@@ -75,6 +77,7 @@ public class Todo_application extends JFrame {
         clearTodoBtn.addActionListener(e -> deleteSelectedTodo());
         clearDoneBtn.addActionListener(e -> deleteSelectedDone());
         clearAll.addActionListener(e -> clearAll());
+        edit.addActionListener(e -> editTask());
 
         setVisible(true);
         setMinimumSize(new Dimension(720, 480));
@@ -150,6 +153,27 @@ public class Todo_application extends JFrame {
         private void clearAll() {
             todoModel.clear(); 
             doneModel.clear();
+        }
+
+        // Edit knapp funktion
+        private void editTask() {
+        if (todoList.getSelectedIndex() != -1) {
+            int idx = todoList.getSelectedIndex();
+            String current = todoModel.get(idx);
+            String updated = JOptionPane.showInputDialog(this, "Ändra task:", current);
+            if (updated != null && !updated.trim().isEmpty()) {
+                todoModel.set(idx, updated.trim());
+            }
+        } else if (doneList.getSelectedIndex() != -1) {
+            int idx = doneList.getSelectedIndex();
+            String current = doneModel.get(idx);
+            String updated = JOptionPane.showInputDialog(this, "Ändra task:", current);
+            if (updated != null && !updated.trim().isEmpty()) {
+                doneModel.set(idx, updated.trim());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Välj en task att redigera.");
+        }
         }
 
     public static void main(String[] args) throws Exception {
