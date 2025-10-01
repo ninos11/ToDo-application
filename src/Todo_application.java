@@ -6,8 +6,9 @@ public class Todo_application extends JFrame {
     private final JTextField input = new JTextField();
     private final JButton addButton = new JButton("Lägg till");
     private final DefaultListModel<String> todoModel = new DefaultListModel<>();
+    private final DefaultListModel<String> doneModel = new DefaultListModel<>();
     private final JList<String> todoList = new JList<>(todoModel);
-    private final JList<String> doneList = new JList<>();
+    private final JList<String> doneList = new JList<>(doneModel);
     private final JButton toDoneBtn = new JButton("→");
     private final JButton toTodoBtn = new JButton("←");
     private final JButton clearTodoBtn = new JButton("Rensa");
@@ -68,14 +69,14 @@ public class Todo_application extends JFrame {
    
         addButton.addActionListener(e -> addTask());
         input.addActionListener(e -> addTask());
-
+        toDoneBtn.addActionListener(e -> moveToDone());
 
         setVisible(true);
         setMinimumSize(new Dimension(720, 480));
         setLocationRelativeTo(null);
 
     }
-    
+    // Lägg till uppgift i ToDo
     private void addTask() {
         String text = input.getText().trim();
         if (!text.isEmpty()) {
@@ -85,6 +86,17 @@ public class Todo_application extends JFrame {
         }
     }
 
+     // Flytta markerade från ToDo till Done
+    private void moveToDone() {
+    int[] idx = todoList.getSelectedIndices();
+    if (idx.length == 0) return;
+
+    // Lägg till i Done
+    for (int i : idx) {
+        doneModel.addElement(todoModel.get(i));
+    }
+    }
+    
     public static void main(String[] args) throws Exception {
         new Todo_application();
 
