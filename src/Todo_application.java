@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Todo_application extends JFrame {
 
@@ -21,6 +23,18 @@ public class Todo_application extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(12, 12));
         ((JComponent) getContentPane()).setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+        
+        // Lägg till musklick-lyssnare på hela frame:n
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Kontrollera att klicket inte var på någon av listorna
+                Component clickedComponent = findComponentAt(e.getPoint());
+                if (clickedComponent != todoList && clickedComponent != doneList) {
+                    clearAllSelections();
+                }
+            }
+        });
 
         // Top Part: textbox and add button
         JPanel topPart = new JPanel(new BorderLayout(8, 8));
@@ -28,10 +42,13 @@ public class Todo_application extends JFrame {
         topPart.add(input, BorderLayout.CENTER);
         topPart.add(addButton, BorderLayout.EAST);
         add(topPart, BorderLayout.NORTH);
+        
 
         // Mitten: ToDo-panel | pilar-panel | Done-panel
         JPanel center = new JPanel(new GridBagLayout());
         add(center, BorderLayout.CENTER);
+       
+
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(6, 6, 6, 6);
         c.fill = GridBagConstraints.BOTH;
@@ -42,16 +59,29 @@ public class Todo_application extends JFrame {
         JPanel ToDoPanel = new JPanel(new BorderLayout(6, 6));
         ToDoPanel.add(new JLabel("To-Do"), BorderLayout.NORTH);
         todoList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        todoList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                handleListClick(e, todoList);
+            }
+        });
         ToDoPanel.add(new JScrollPane(todoList), BorderLayout.CENTER);
         ToDoPanel.add(clearTodoBtn, BorderLayout.SOUTH);
         c.gridx = 1;
         c.gridy = 0;
         center.add(ToDoPanel, c);
+      
 
         // Done panel
         JPanel DonePanel = new JPanel(new BorderLayout(6, 6));
         DonePanel.add(new JLabel("Done"), BorderLayout.NORTH);
         doneList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        doneList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                handleListClick(e, doneList);
+            }
+        });
         DonePanel.add(new JScrollPane(doneList), BorderLayout.CENTER);
         DonePanel.add(clearDoneBtn, BorderLayout.SOUTH);
         c.gridx = 3;
@@ -110,6 +140,7 @@ public class Todo_application extends JFrame {
         for (int i = idx.length - 1; i >= 0; i--) {
             todoModel.remove(idx[i]);
         }
+        clearAllSelections();
     }
 
     // Flytta markerade tasks från Done till Todo
@@ -121,42 +152,47 @@ public class Todo_application extends JFrame {
         // Lägg till i ToDo
         for (int i : idx) {
             todoModel.addElement(doneModel.get(i));
-            
+
         }
 
         // Ta bort från Done (baklänges)
         for (int i = idx.length - 1; i >= 0; i--) {
-        doneModel.remove(idx[i]);
+            doneModel.remove(idx[i]);
         }
+        todoList.clearSelection();
 
-        
-        }
+    }
 
-        // Rensa markerade i ToDo
-        private void deleteSelectedTodo() {
+    // Rensa markerade i ToDo
+    private void deleteSelectedTodo() {
         int[] idx = todoList.getSelectedIndices();
-        if (idx.length == 0) return;
+        if (idx.length == 0)
+            return;
         for (int i = idx.length - 1; i >= 0; i--) {
             todoModel.remove(idx[i]);
         }
-        }
 
-        // Rensa markerade i Done
-        private void deleteSelectedDone() {
+    }
+
+    // Rensa markerade i Done
+    private void deleteSelectedDone() {
         int[] idx = doneList.getSelectedIndices();
-        if (idx.length == 0) return;
+        if (idx.length == 0)
+            return;
         for (int i = idx.length - 1; i >= 0; i--) {
             doneModel.remove(idx[i]);
         }
-        }
-        // Rensa allt i både ToDo och Done
-        private void clearAll() {
-            todoModel.clear(); 
-            doneModel.clear();
-        }
 
-        // Edit knapp funktion
-        private void editTask() {
+    }
+
+    // Rensa allt i både ToDo och Done
+    private void clearAll() {
+        todoModel.clear();
+        doneModel.clear();
+    }
+
+    // Edit knapp funktion
+    private void editTask() {
         if (todoList.getSelectedIndex() != -1) {
             int idx = todoList.getSelectedIndex();
             String current = todoModel.get(idx);
@@ -174,11 +210,24 @@ public class Todo_application extends JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Välj en task att redigera.");
         }
+    }
+
+    // Metod för att avmarkera alla tasks
+    private void clearAllSelections() {
+        todoList.clearSelection();
+        doneList.clearSelection();
+    }
+
+    // Metod för att hantera musklick i listorna
+    private void handleListClick(MouseEvent e, JList<?> list) {
+        int index = list.locationToIndex(e.getPoint());
+        if (index == -1 || !list.getCellBounds(index, index).contains(e.getPoint())) {
+            clearAllSelections();
         }
+    }
 
     public static void main(String[] args) throws Exception {
         new Todo_application();
-
     }
 
 }
