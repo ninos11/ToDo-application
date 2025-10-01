@@ -5,7 +5,8 @@ public class Todo_application extends JFrame {
 
     private final JTextField input = new JTextField();
     private final JButton addButton = new JButton("Lägg till");
-    private final JList<String> todoList = new JList<>();
+    private final DefaultListModel<String> todoModel = new DefaultListModel<>();
+    private final JList<String> todoList = new JList<>(todoModel);
     private final JList<String> doneList = new JList<>();
     private final JButton toDoneBtn = new JButton("→");
     private final JButton toTodoBtn = new JButton("←");
@@ -64,14 +65,30 @@ public class Todo_application extends JFrame {
         center.add(arrows, c);
         c.fill = GridBagConstraints.BOTH;
 
+   
+        addButton.addActionListener(e -> addTask());
+        input.addActionListener(e -> addTask());
+
+
         setVisible(true);
         setMinimumSize(new Dimension(720, 480));
         setLocationRelativeTo(null);
 
+    }
+    
+    private void addTask() {
+        String text = input.getText().trim();
+        if (!text.isEmpty()) {
+            todoModel.addElement(text);
+            input.setText("");
+            input.requestFocusInWindow();
+        }
     }
 
     public static void main(String[] args) throws Exception {
         new Todo_application();
 
     }
+
 }
+
