@@ -99,17 +99,30 @@ public class Todo_application extends JFrame {
         for (int i : idx) {
             doneModel.addElement(todoModel.get(i));
         }
+
+        // Ta bort från ToDo (baklänges)
+    for (int i = idx.length - 1; i >= 0; i--) {
+        todoModel.remove(idx[i]);
+    }
     }
     // Flytta markerade tasks från Done till Todo
     private void moveToTodo() {
-        int[] index = doneList.getSelectedIndices();
-        if (index.length == 0)
+        int[] idx = doneList.getSelectedIndices();
+        if (idx.length == 0)
             return;
 
         // Lägg till i ToDo
-        for (int i : index) {
+        for (int i : idx) {
             todoModel.addElement(doneModel.get(i));
+            
         }
+
+        // Ta bort från Done (baklänges)
+    for (int i = idx.length - 1; i >= 0; i--) {
+        doneModel.remove(idx[i]);
+    }
+
+     
     }
 
     public static void main(String[] args) throws Exception {
