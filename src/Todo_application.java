@@ -16,39 +16,36 @@ public class Todo_application extends JFrame {
     private final JButton clearTodoBtn = new JButton("Rensa");
     private final JButton clearDoneBtn = new JButton("Rensa");
     private final JButton clearAll = new JButton("Rensa allt");
-    private final JButton edit = new JButton("Redegera");
+    private final JButton edit = new JButton("Redigera");
 
     public Todo_application() {
         setTitle("ToDo Application");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(12, 12));
         ((JComponent) getContentPane()).setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
-        
-        // Lägg till musklick-lyssnare på hela frame:n
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // Kontrollera att klicket inte var på någon av listorna
-                Component clickedComponent = findComponentAt(e.getPoint());
-                if (clickedComponent != todoList && clickedComponent != doneList) {
-                    clearAllSelections();
-                }
-            }
-        });
 
+        
         // Top Part: textbox and add button
         JPanel topPart = new JPanel(new BorderLayout(8, 8));
         input.setPreferredSize(new Dimension(10, 30));
         topPart.add(input, BorderLayout.CENTER);
         topPart.add(addButton, BorderLayout.EAST);
         add(topPart, BorderLayout.NORTH);
+        // Lägg till en muslyssnare på input-fältet för att avmarkera
+        input.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                clearAllSelections();
+            }
+        });
+        
+        
         
 
         // Mitten: ToDo-panel | pilar-panel | Done-panel
         JPanel center = new JPanel(new GridBagLayout());
         add(center, BorderLayout.CENTER);
        
-
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(6, 6, 6, 6);
         c.fill = GridBagConstraints.BOTH;
@@ -57,6 +54,8 @@ public class Todo_application extends JFrame {
 
         // ToDo panel
         JPanel ToDoPanel = new JPanel(new BorderLayout(6, 6));
+        ToDoPanel.setMinimumSize(new Dimension(250, 300));  
+        ToDoPanel.setPreferredSize(new Dimension(300, 400)); 
         ToDoPanel.add(new JLabel("To-Do"), BorderLayout.NORTH);
         todoList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         todoList.addMouseListener(new MouseAdapter() {
@@ -74,6 +73,8 @@ public class Todo_application extends JFrame {
 
         // Done panel
         JPanel DonePanel = new JPanel(new BorderLayout(6, 6));
+        DonePanel.setMinimumSize(new Dimension(250, 300));  
+        DonePanel.setPreferredSize(new Dimension(300, 400)); 
         DonePanel.add(new JLabel("Done"), BorderLayout.NORTH);
         doneList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         doneList.addMouseListener(new MouseAdapter() {
@@ -171,7 +172,6 @@ public class Todo_application extends JFrame {
         for (int i = idx.length - 1; i >= 0; i--) {
             todoModel.remove(idx[i]);
         }
-
     }
 
     // Rensa markerade i Done
