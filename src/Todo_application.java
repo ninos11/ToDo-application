@@ -24,7 +24,6 @@ public class Todo_application extends JFrame {
         setLayout(new BorderLayout(12, 12));
         ((JComponent) getContentPane()).setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
-        
         // Top Part: textbox and add button
         JPanel topPart = new JPanel(new BorderLayout(8, 8));
         input.setPreferredSize(new Dimension(10, 30));
@@ -38,14 +37,18 @@ public class Todo_application extends JFrame {
                 clearAllSelections();
             }
         });
-        
-        
-        
 
         // Mitten: ToDo-panel | pilar-panel | Done-panel
         JPanel center = new JPanel(new GridBagLayout());
         add(center, BorderLayout.CENTER);
-       
+        // Lägg till en muslyssnare på center-panelen för att avmarkera
+        center.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                clearAllSelections();
+            }
+        });
+
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(6, 6, 6, 6);
         c.fill = GridBagConstraints.BOTH;
@@ -54,8 +57,8 @@ public class Todo_application extends JFrame {
 
         // ToDo panel
         JPanel ToDoPanel = new JPanel(new BorderLayout(6, 6));
-        ToDoPanel.setMinimumSize(new Dimension(250, 300));  
-        ToDoPanel.setPreferredSize(new Dimension(300, 400)); 
+        ToDoPanel.setMinimumSize(new Dimension(250, 300));
+        ToDoPanel.setPreferredSize(new Dimension(300, 400));
         ToDoPanel.add(new JLabel("To-Do"), BorderLayout.NORTH);
         todoList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         todoList.addMouseListener(new MouseAdapter() {
@@ -69,12 +72,11 @@ public class Todo_application extends JFrame {
         c.gridx = 1;
         c.gridy = 0;
         center.add(ToDoPanel, c);
-      
 
         // Done panel
         JPanel DonePanel = new JPanel(new BorderLayout(6, 6));
-        DonePanel.setMinimumSize(new Dimension(250, 300));  
-        DonePanel.setPreferredSize(new Dimension(300, 400)); 
+        DonePanel.setMinimumSize(new Dimension(250, 300));
+        DonePanel.setPreferredSize(new Dimension(300, 400));
         DonePanel.add(new JLabel("Done"), BorderLayout.NORTH);
         doneList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         doneList.addMouseListener(new MouseAdapter() {
