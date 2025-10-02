@@ -172,7 +172,6 @@ public class Todo_application extends JFrame {
         for (int i = idx.length - 1; i >= 0; i--) {
             todoModel.remove(idx[i]);
         }
-
     }
 
     // Rensa markerade i Done
